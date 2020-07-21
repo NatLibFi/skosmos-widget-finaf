@@ -1,0 +1,6 @@
+{
+    "js": ["widget.js"],
+    "callback": ["title_window"],
+    "css": ["stylesheet.css"],
+    "templates": ["template.html"]
+}
