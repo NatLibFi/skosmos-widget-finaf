@@ -6,8 +6,11 @@ TITLEWINDOW = {
 
     apiUrl: "https://api.finna.fi/v1/search?",
     authorIdIdentifier: "melinda.(FI-ASTERI-N)",
-    fields: ['shortTitle', 'uniformTitles', 'formats', 'year'],
-    sortOrder: "main_date_str asc",
+    fields: ['shortTitle', 'uniformTitles', 'formats', 'nonPresenterAuthors', 'year'],
+    /*Available values : relevance, id asc, main_date_str desc, main_date_str asc, callnumber, 
+    author, title, last_indexed desc,id asc, first_indexed desc,id asc
+    */
+    sortOrder: "relevance",
     limit: 100,
     maxResults: 1000, //maximum number of results to be queried from Finna API
     
@@ -27,7 +30,9 @@ TITLEWINDOW = {
         Video: {fi: 'videoita', sv: 'video', en: 'videos'}, 
         Thesis: {fi: 'opinnäytteitä', sv: 'examensarbeten', en: 'theses'}
     },
- 
+    
+    customSortOrder: ['kirjoja', 'äänitteitä', 'nuotteja', 'videoita', 'lehtiä ja artikkeleja', 'kuvia'],
+    
     generateQueryString: function(identifier, lookforField, offset=1) {
         identifier = "\"" + TITLEWINDOW.authorIdIdentifier + identifier + "\"";
         var lookfor = "lookfor=" + lookforField + ":" + identifier;
@@ -61,8 +66,12 @@ TITLEWINDOW = {
         });
     },
     
-    manageQueryResults: function(results) {
+    manageQueryResults: function(results) {  
         var renderedTitles = Object();
+
+        if (jQuery.isEmptyObject(results)) {
+            renderedTitles['kansallisbibliografiasta ei löydy julkaisuja'] = null;
+        }
         $.each( results, function( type, value ) {
             var records = Array.prototype.concat.apply([], results[type]);
             var titles = Object();
@@ -81,6 +90,7 @@ TITLEWINDOW = {
                 }
                 if (recordFormat in TITLEWINDOW.formatTranslations) {
                     recordFormat = TITLEWINDOW.formatTranslations[recordFormat][TITLEWINDOW.language];
+                    if (recordFormat == 'opinnäytteitä') recordFormat = 'kirjoja';
                     if (titles[recordFormat] === undefined) {
                         titles[recordFormat] = Object(); 
                     }
@@ -95,21 +105,29 @@ TITLEWINDOW = {
                             titles[recordFormat][title.toLowerCase()].title = title;
                         }  
                     }
-                }
-
-                
+                }     
             });
-            translatedType = TITLEWINDOW.translatedLookforFields[type]
+            
+            var translatedType = TITLEWINDOW.translatedLookforFields[type];
             renderedTitles[translatedType] = Object();
-            $.each( titles, function (format, value) {
-                renderedTitles[translatedType][format] = [];
-                $.each( titles[format], function (title, record) {
-                    recordName = record.title + " (" + record.year + ")";
-                    renderedTitles[translatedType][format].push(recordName);
-                });
+
+          
+           $.each( TITLEWINDOW.customSortOrder, function (index) {
+                var format = TITLEWINDOW.customSortOrder[index];
+                if (format in titles) {
+                    renderedTitles[translatedType][format] = [];
+                    $.each( titles[format], function (title, record) {
+                        var recordName = record.title; 
+                        if (record.year !== undefined) {
+                            recordName += " (" + record.year + ")";
+                        }
+                        renderedTitles[translatedType][format].push(recordName);
+                    });
+                }
             });
         });     
-        TITLEWINDOW.render(renderedTitles);
+
+        return renderedTitles;
        
     },
     
@@ -120,6 +138,44 @@ TITLEWINDOW = {
         var source = $("#finaf-template").html();
 		var template = Handlebars.compile(source);
         $('.concept-info').after(template(data));
+        var listId = 0;
+        $.each( object, function( key, value ) {
+            var $paragraph = $( "<div class='paragraph'></div>" );
+            var $header = $( "<div><p><b>"+key+"</b></p></div>");
+            $paragraph.appendTo("#titles");
+            $paragraph.append( $header);
+            $.each ( value, function (format, titleList) {
+                listId += 1;
+                var titleNumber = 0;
+                var $listHeader = $( "<p><b>"+format+"</b></p> ");
+                var $list = $( "<ul></ul> ");
+                $list.attr('id', listId);
+                $header.append( $listHeader, $list);
+                $.each( titleList, function (title, record) {
+                    titleNumber += 1;
+                    var $titleText = $ ( "<li style='text-align:left'>"+record+"</li>");
+                    if (titleNumber > 5) {
+                        $titleText.addClass( "hideable" );
+                    }
+                    $list.append( $titleText );
+                });
+                if (titleNumber > 5) { 
+                    var $button = $ ( "<button>Näytä kaikki</button>");
+                    $list.append( $button );
+                    var classId = listId;
+                    $button.click(function(){
+                        if ($("#" + classId + " .hideable").is(':visible')) {
+                            $button.html("Näytä kaikki");
+                        }
+                        else {
+                            $button.html("Näytä vähemmän");
+                        }
+                        $("#" + classId + " .hideable").toggle();
+                    });
+                }
+           });  
+       });
+       $(".hideable").hide();
     }
 };
 
@@ -186,11 +242,13 @@ $(function() {
                     $.each(args, function (index, value) {
                         records[value.label].push(value.results.records);
                     });
-                    TITLEWINDOW.manageQueryResults(records);
+                    records = TITLEWINDOW.manageQueryResults(records);
+                    TITLEWINDOW.render(records);
                 }); 
             }
             else {
-                TITLEWINDOW.manageQueryResults(records);
+                records = TITLEWINDOW.manageQueryResults(records);
+                TITLEWINDOW.render(records);
             }
         });
     }

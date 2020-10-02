@@ -1,25 +1,7 @@
 <div class="concept-widget panel-group" id="titleWindow" role="tablist" aria-multiselectable="true">   
     <div class="panel panel-default">
         <div class="panel-heading" role="tab" id="headingWiki">
-            <table id="table">
-                <tr>
-                    {{#each titles}}
-                        <th style="text-align:left"><h2>{{@key}}</h2></th>  
-                    {{/each}}
-                </tr>  
-                <tr>
-                    {{#each titles}}
-                        <td style="vertical-align:top">
-                            {{#each this}}
-                                <h3>{{@key}}</h3>
-                                {{#each this}}
-                                    <div style="text-align:left">{{this}}</div>
-                                {{/each}}
-                            {{/each}}
-                        </td>
-                    {{/each}}
-                </tr>
-            </table>
+            <div id="titles"></div>
         </div>
     </div>
 </div>
