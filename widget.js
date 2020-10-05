@@ -100,7 +100,11 @@ TITLEWINDOW = {
                     else {
                         // if the same title is in uppercase, 
                         // it is replaced by title with one or more lowercase letters
-                        recordTitle = titles[recordFormat][title.toLowerCase()].title
+                        recordTitle = titles[recordFormat][title.toLowerCase()].title;
+                        recordYear = titles[recordFormat][title.toLowerCase()].year;
+                        if (parseInt(recordYear) > parseInt(year)) {
+                            recordYear = titles[recordFormat][title.toLowerCase()].year = year;
+                        }
                         if (title.toUpperCase() !== title && title !== recordTitle) {
                             titles[recordFormat][title.toLowerCase()].title = title;
                         }  
@@ -132,8 +136,10 @@ TITLEWINDOW = {
     },
     
     render: function(object) {
+        var noteText = 'Tiedot tekijään liittyvistä aineistosta haettu kansallisbibliografiasta. ' +
+                   'Linkitykset musiikkiaineistoon ovat toistaiseksi puutteellisia.'
         var data = {
-                titles: object
+                note: noteText
             };
         var source = $("#finaf-template").html();
 		var template = Handlebars.compile(source);
@@ -149,7 +155,7 @@ TITLEWINDOW = {
                 var titleNumber = 0;
                 var $listHeader = $( "<p><b>"+format+"</b></p> ");
                 var $list = $( "<ul></ul> ");
-                $list.attr('id', listId);
+                $list.attr('id', "list" + listId);
                 $header.append( $listHeader, $list);
                 $.each( titleList, function (title, record) {
                     titleNumber += 1;
@@ -160,17 +166,17 @@ TITLEWINDOW = {
                     $list.append( $titleText );
                 });
                 if (titleNumber > 5) { 
-                    var $button = $ ( "<button>Näytä kaikki</button>");
+                    var $button = $ ( "<a>Näytä kaikki<i class='arrow down'></i></a>");
                     $list.append( $button );
                     var classId = listId;
-                    $button.click(function(){
+                    $button.click(function(e){
+                        $("#" + classId + " .hideable").toggle();
                         if ($("#" + classId + " .hideable").is(':visible')) {
-                            $button.html("Näytä kaikki");
+                            $button.html("Näytä vähemmän<i class='arrow up'>");
                         }
                         else {
-                            $button.html("Näytä vähemmän");
+                            $button.html("Näytä kaikki<i class='arrow down'>");
                         }
-                        $("#" + classId + " .hideable").toggle();
                     });
                 }
            });  

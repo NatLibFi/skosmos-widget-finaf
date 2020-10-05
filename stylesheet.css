@@ -8,3 +8,26 @@
   display: table;
   clear: both;
 }
+
+.arrow {
+  border: solid #00748f;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+  margin-left: 3px;
+}
+
+.up {
+  transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+}
+
+.down {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+
+ul {
+    list-style: none;
+    padding-left: 0;
+}​
