@@ -68,10 +68,6 @@ TITLEWINDOW = {
     
     manageQueryResults: function(results) {  
         var renderedTitles = Object();
-
-        if (jQuery.isEmptyObject(results)) {
-            renderedTitles['kansallisbibliografiasta ei löydy julkaisuja'] = null;
-        }
         $.each( results, function( type, value ) {
             var records = Array.prototype.concat.apply([], results[type]);
             var titles = Object();
@@ -136,8 +132,16 @@ TITLEWINDOW = {
     },
     
     render: function(object) {
-        var noteText = 'Tiedot tekijään liittyvistä aineistosta haettu kansallisbibliografiasta. ' +
-                   'Linkitykset musiikkiaineistoon ovat toistaiseksi puutteellisia.'
+        var noteText = "";
+        if (jQuery.isEmptyObject(object)) {
+            noteText = 'Tekijälle ei löydy julkaisuja. ' +
+                       'Tietoja tekijään liittyvistä aineistosta haettu kansallisbibliografiasta Finnan kautta. ' +
+                       'Linkitykset musiikkiaineistoon ovat toistaiseksi puutteellisia.';
+        }
+        else {
+            noteText = 'Tiedot tekijään liittyvistä aineistosta haettu kansallisbibliografiasta Finnan kautta. ' +
+                       'Linkitykset musiikkiaineistoon ovat toistaiseksi puutteellisia.';
+        }
         var data = {
                 note: noteText
             };
@@ -147,19 +151,19 @@ TITLEWINDOW = {
         var listId = 0;
         $.each( object, function( key, value ) {
             var $paragraph = $( "<div class='paragraph'></div>" );
-            var $header = $( "<div><p><b>"+key+"</b></p></div>");
+            var $header = $( "<div class='versal-bold'><p>"+key.toUpperCase()+"</p></div>");
             $paragraph.appendTo("#titles");
             $paragraph.append( $header);
             $.each ( value, function (format, titleList) {
                 listId += 1;
                 var titleNumber = 0;
-                var $listHeader = $( "<p><b>"+format+"</b></p> ");
+                var $listHeader = $( "<p class='versal'>"+format.toUpperCase()+"</p> ");
                 var $list = $( "<ul></ul> ");
                 $list.attr('id', "list" + listId);
-                $header.append( $listHeader, $list);
+                $paragraph.append( $listHeader, $list);
                 $.each( titleList, function (title, record) {
                     titleNumber += 1;
-                    var $titleText = $ ( "<li style='text-align:left'>"+record+"</li>");
+                    var $titleText = $ ( "<li classstyle='text-align:left'>"+record+"</li>");
                     if (titleNumber > 5) {
                         $titleText.addClass( "hideable" );
                     }
@@ -168,7 +172,7 @@ TITLEWINDOW = {
                 if (titleNumber > 5) { 
                     var $button = $ ( "<a>Näytä kaikki<i class='arrow down'></i></a>");
                     $list.append( $button );
-                    var classId = listId;
+                    var classId = "list" + listId;
                     $button.click(function(e){
                         $("#" + classId + " .hideable").toggle();
                         if ($("#" + classId + " .hideable").is(':visible')) {
