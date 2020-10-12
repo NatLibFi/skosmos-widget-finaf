@@ -1,7 +1,9 @@
 <div class="concept-widget panel-group" id="titleWindow" role="tablist" aria-multiselectable="true">   
     <div class="panel panel-default">
         <div class="panel-heading" id="titles">
-            <h2>{{ note }}</h2>
+            {{#each notes}}
+                <p>{{ this }}</p>  
+            {{/each}}
         </div>
     </div>
 </div>

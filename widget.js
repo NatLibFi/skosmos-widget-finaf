@@ -132,18 +132,18 @@ TITLEWINDOW = {
     },
     
     render: function(object) {
-        var noteText = "";
+        var noteText = [];
         if (jQuery.isEmptyObject(object)) {
-            noteText = 'Tekijälle ei löydy julkaisuja. ' +
-                       'Tietoja tekijään liittyvistä aineistosta haettu kansallisbibliografiasta Finnan kautta. ' +
-                       'Linkitykset musiikkiaineistoon ovat toistaiseksi puutteellisia.';
+            noteText.push('Tekijälle ei löydy julkaisuja.');
+            noteText.push('Tietoja tekijään liittyvistä aineistosta haettu kansallisbibliografiasta Finnan kautta.');
         }
         else {
-            noteText = 'Tiedot tekijään liittyvistä aineistosta haettu kansallisbibliografiasta Finnan kautta. ' +
-                       'Linkitykset musiikkiaineistoon ovat toistaiseksi puutteellisia.';
+            noteText.push('Tiedot tekijään liittyvistä aineistosta haettu kansallisbibliografiasta Finnan kautta.');
+                       
         }
+        noteText.push('HUOM! Linkitykset musiikkiaineistoon ovat toistaiseksi puutteellisia.');
         var data = {
-                note: noteText
+                notes: noteText
             };
         var source = $("#finaf-template").html();
 		var template = Handlebars.compile(source);
