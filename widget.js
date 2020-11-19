@@ -6,21 +6,26 @@ TITLEWINDOW = {
 
     apiUrl: "https://api.finna.fi/v1/search?",
     authorIdIdentifier: "melinda.(FI-ASTERI-N)",
-    fields: ['shortTitle', 'uniformTitles', 'formats', 'nonPresenterAuthors', 'year'],
+    finnaURL: "https://kansalliskirjasto.finna.fi/",
+    recordPrefix: "Record/",
+    authorPrefix: "AuthorityRecord/melinda.(FI-ASTERI-N)",
+    languageSuffix: {fi:'?lng=fi', sv: '?lng=sv', en: '?lng=en'},
+    institution: "building:\"0\/NLF\/\"",
+    fields: ['shortTitle', 'OtherRecordLink', 'formats', 'id', 'year'],
     /*Available values : relevance, id asc, main_date_str desc, main_date_str asc, callnumber, 
     author, title, last_indexed desc,id asc, first_indexed desc,id asc
     */
-    sortOrder: "relevance",
+    sortOrder: "main_date_str desc",
     limit: 100,
     maxResults: 1000, //maximum number of results to be queried from Finna API
     
     language: "fi",
     
     translatedLookforFields: {
-        author2_id_str_mv: 'Tekijänä teoksissa',
-        topic_id_str_mv: 'Aiheena teoksissa'
+        author2_id_str_mv: {fi: 'Tekijänä teoksissa', sv: 'upphov för verken', en: 'as author'},
+        topic_id_str_mv: {fi: 'Aiheena teoksissa', sv: 'ämne i verken', en: 'as topic'}
     },
-
+    
     formatTranslations: {
         Image: {fi: 'kuvia', sv: 'bilder', en: 'images'}, 
         Book: {fi: 'kirjoja', sv: 'böcker', en: 'books'}, 
@@ -31,14 +36,45 @@ TITLEWINDOW = {
         Thesis: {fi: 'opinnäytteitä', sv: 'examensarbeten', en: 'theses'}
     },
     
-    customSortOrder: ['kirjoja', 'äänitteitä', 'nuotteja', 'videoita', 'lehtiä ja artikkeleja', 'kuvia'],
+    customSortOrder: ['Book', 'Sound', 'MusicalScore', 'Video', 'Journal', 'Image'],
+     
+    noteTexts: {
+        error: {fi: 'Tekijälle ei löydy julkaisuja.', 
+            sv: 'Inga utgåvor hittas för upphovspersonen',
+            en: 'No publications found for the author.'
+        },
+        source: {fi: 'Tietoja tekijään liittyvästä aineistosta haettu kansallisbibliografiasta Finnan kautta',
+            sv: 'Information om material som relaterar till upphovspersonen har sökts från nationalbibliografin med Finna',
+            en: 'Information about authors’ publications is received from national bibliography from Finna.'
+        },
+        sorting: {fi: 'Tiedot tekijään liittyvästä aineistosta haettu kansallisbibliografiasta Finnan kautta. Aineisto on järjestetty julkaisuvuoden mukaan.', 
+            sv: 'Information om material som relaterar till upphovspersonen har sökts från nationalbibliografin med Finna. Materialet har ordnats enligt utgivningstid',
+            en: 'Information about authors’ publications is received from national bibliography from Finna. Publications are sorted by the publication date.'
+        },
+        note: {fi: 'HUOM! Linkitykset musiikkiaineistoon ovat toistaiseksi puutteellisia.', 
+            sv: 'OBS! Länkarna till musikmaterialet är tills vidare bristfälliga',
+            en: 'Note: Links to audio recordings and musical scores are incomplete for the moment.'
+        }
+    },
+
+    buttonTexts: {
+        more: {fi: 'Näytä kaikki', sv: 'Visa allt', en: 'Show all'},
+        less: {fi: 'Näytä vähemmän', sv: 'Visa mindre', en: 'Show less'}
+    },
     
-    generateQueryString: function(identifier, lookforField, offset=1) {
+    finnaSearchTexts: {
+        fi: 'Katso hakutulokset Kansalliskirjaston hakupalvelusta', 
+        sv: 'Se alla sökresultat från söktjänst för Nationalbiblioteket', 
+        en: 'See all the results from the National Library Search'
+    },
+    
+    generateQueryString: function(identifier, lookforField, offset) {
         identifier = "\"" + TITLEWINDOW.authorIdIdentifier + identifier + "\"";
         var lookfor = "lookfor=" + lookforField + ":" + identifier;
         var url = TITLEWINDOW.apiUrl + lookfor;
         var parameters = {
             "field": TITLEWINDOW.fields,
+            "filter": TITLEWINDOW.institution,
             "limit": TITLEWINDOW.limit,
             "sort": TITLEWINDOW.sortOrder,
             "page": offset
@@ -66,7 +102,7 @@ TITLEWINDOW = {
         });
     },
     
-    manageQueryResults: function(results) {  
+    manageQueryResults: function(results) {
         var renderedTitles = Object();
         $.each( results, function( type, value ) {
             var records = Array.prototype.concat.apply([], results[type]);
@@ -74,9 +110,7 @@ TITLEWINDOW = {
             $.each( records, function( index, value ) {
                 var record = records[index];
                 var title = record.shortTitle;
-                if (record.uniformTitles.length > 0) {
-                    title = record.uniformTitles[0];
-                }
+                var url = TITLEWINDOW.finnaURL + TITLEWINDOW.recordPrefix + record.id;
                 var year = record.year;
                 // the hierarchically highest level of format gets chosen
                 var recordFormat;
@@ -85,13 +119,12 @@ TITLEWINDOW = {
                      recordFormat = valueList[1];
                 }
                 if (recordFormat in TITLEWINDOW.formatTranslations) {
-                    recordFormat = TITLEWINDOW.formatTranslations[recordFormat][TITLEWINDOW.language];
-                    if (recordFormat == 'opinnäytteitä') recordFormat = 'kirjoja';
+                    if (recordFormat == 'Thesis') recordFormat = 'Book';
                     if (titles[recordFormat] === undefined) {
                         titles[recordFormat] = Object(); 
                     }
                     if (titles[recordFormat][title.toLowerCase()] === undefined) {
-                        titles[recordFormat][title.toLowerCase()] = {'title': title, 'year': year};
+                        titles[recordFormat][title.toLowerCase()] = {'title': title, 'year': year, 'url': url};
                     }
                     else {
                         // if the same title is in uppercase, 
@@ -99,29 +132,29 @@ TITLEWINDOW = {
                         recordTitle = titles[recordFormat][title.toLowerCase()].title;
                         recordYear = titles[recordFormat][title.toLowerCase()].year;
                         if (parseInt(recordYear) > parseInt(year)) {
-                            recordYear = titles[recordFormat][title.toLowerCase()].year = year;
+                            recordYear = titles[recordFormat][title.toLowerCase()].year = recordYear;
                         }
+                        
                         if (title.toUpperCase() !== title && title !== recordTitle) {
                             titles[recordFormat][title.toLowerCase()].title = title;
                         }  
                     }
                 }     
             });
-            
-            var translatedType = TITLEWINDOW.translatedLookforFields[type];
+
+            var translatedType = TITLEWINDOW.translatedLookforFields[type][TITLEWINDOW.language];
             renderedTitles[translatedType] = Object();
 
-          
            $.each( TITLEWINDOW.customSortOrder, function (index) {
-                var format = TITLEWINDOW.customSortOrder[index];
-                if (format in titles) {
-                    renderedTitles[translatedType][format] = [];
-                    $.each( titles[format], function (title, record) {
+                var recordFormat = TITLEWINDOW.customSortOrder[index];
+                var renderedFormat = TITLEWINDOW.formatTranslations[recordFormat][TITLEWINDOW.language];
+                if (recordFormat in titles) {
+                    renderedTitles[translatedType][renderedFormat] = [];
+                    $.each( titles[recordFormat], function (title, record) {
                         var recordName = record.title; 
-                        if (record.year !== undefined) {
-                            recordName += " (" + record.year + ")";
-                        }
-                        renderedTitles[translatedType][format].push(recordName);
+
+                        renderedTitles[translatedType][renderedFormat].push({"title": recordName, 
+                        "year": record.year, "url": record.url});
                     });
                 }
             });
@@ -131,17 +164,16 @@ TITLEWINDOW = {
        
     },
     
-    render: function(object) {
+    render: function(identifier, object) {
         var noteText = [];
         if (jQuery.isEmptyObject(object)) {
-            noteText.push('Tekijälle ei löydy julkaisuja.');
-            noteText.push('Tietoja tekijään liittyvistä aineistosta haettu kansallisbibliografiasta Finnan kautta.');
+            noteText.push(TITLEWINDOW.noteTexts['error'][TITLEWINDOW.language]);
+            noteText.push(TITLEWINDOW.noteTexts['source'][TITLEWINDOW.language]);
         }
         else {
-            noteText.push('Tiedot tekijään liittyvistä aineistosta haettu kansallisbibliografiasta Finnan kautta.');
-                       
+            noteText.push(TITLEWINDOW.noteTexts['sorting'][TITLEWINDOW.language]);     
         }
-        noteText.push('HUOM! Linkitykset musiikkiaineistoon ovat toistaiseksi puutteellisia.');
+        noteText.push(TITLEWINDOW.noteTexts['note'][TITLEWINDOW.language]);  
         var data = {
                 notes: noteText
             };
@@ -157,34 +189,52 @@ TITLEWINDOW = {
             $.each ( value, function (format, titleList) {
                 listId += 1;
                 var titleNumber = 0;
-                var $listHeader = $( "<p class='versal'>"+format.toUpperCase()+"</p> ");
-                var $list = $( "<ul></ul> ");
+                var $listHeader = $( "<p class='versal-bold'>"+format.toUpperCase()+"</p> ");
+                var $list = $( "<ul class='works-list'></ul> ");
                 $list.attr('id', "list" + listId);
                 $paragraph.append( $listHeader, $list);
                 $.each( titleList, function (title, record) {
                     titleNumber += 1;
-                    var $titleText = $ ( "<li classstyle='text-align:left'>"+record+"</li>");
+                    var year = "";
+                    if (record.year !== undefined) {
+                            year += " (" + record.year + ")";
+                        }
+                    var $titleText = $ ( "<li style='text-align:left'><a href="
+                        +record.url+TITLEWINDOW.languageSuffix[TITLEWINDOW.language]
+                        +" target='_blank'>"+record.title+"</a>"+year+"</li>");
                     if (titleNumber > 5) {
                         $titleText.addClass( "hideable" );
                     }
                     $list.append( $titleText );
                 });
                 if (titleNumber > 5) { 
-                    var $button = $ ( "<a>Näytä kaikki<i class='arrow down'></i></a>");
+                    var $button = $ ( "<a class='toggle-text versal'>"
+                        +TITLEWINDOW.buttonTexts['more'][TITLEWINDOW.language].toUpperCase()
+                        +"<i class='triangle-down'></i></a>");
+                    $button.css({ 'color': 'black'});
                     $list.append( $button );
                     var classId = "list" + listId;
                     $button.click(function(e){
                         $("#" + classId + " .hideable").toggle();
                         if ($("#" + classId + " .hideable").is(':visible')) {
-                            $button.html("Näytä vähemmän<i class='arrow up'>");
+                            //$button.html("<a class='toggle-text versal'>"+TITLEWINDOW.buttonTexts['less'][TITLEWINDOW.language]
+                            //+"</a><i class='triangle-up'></i>");
+                            $button.html(TITLEWINDOW.buttonTexts['less'][TITLEWINDOW.language].toUpperCase()
+                            +"<i class='triangle-up'>");                            
                         }
                         else {
-                            $button.html("Näytä kaikki<i class='arrow down'>");
+                            //$button.html( "<a class='toggle-text versal'>"+TITLEWINDOW.buttonTexts['more'][TITLEWINDOW.language]
+                            //+"</a><i class='triangle-down'></i>");
+                            $button.html(TITLEWINDOW.buttonTexts['more'][TITLEWINDOW.language].toUpperCase()
+                            +"<i class='triangle-down'>");
                         }
                     });
                 }
            });  
        });
+       $("#finna-search").html("<a class='versal' href="+TITLEWINDOW.finnaURL+TITLEWINDOW.authorPrefix+identifier
+       +TITLEWINDOW.languageSuffix[TITLEWINDOW.language]+" target='_blank'>"
+       +TITLEWINDOW.finnaSearchTexts[TITLEWINDOW.language]+"</a>");
        $(".hideable").hide();
     }
 };
@@ -201,11 +251,11 @@ $(function() {
             return;
         }
         var identifier;
+        TITLEWINDOW.language = lang;
         var uri = data['uri'];
         $.each(data['json-ld'].graph, function (key, value) {
             if (value.type == "skos:ConceptScheme") {
                 identifier = uri.replace(value.uri, "");
-                        
                 }
         });
         if (!identifier) {
@@ -213,7 +263,7 @@ $(function() {
         }
         var queries = [];
         $.each (TITLEWINDOW.lookforFields, function (index, field) {
-            var restURL = TITLEWINDOW.generateQueryString(identifier, field);
+            var restURL = TITLEWINDOW.generateQueryString(identifier, field, 1);
             var query = TITLEWINDOW.queryFinna(restURL, field);
             queries.push(query);
         });
@@ -253,24 +303,14 @@ $(function() {
                         records[value.label].push(value.results.records);
                     });
                     records = TITLEWINDOW.manageQueryResults(records);
-                    TITLEWINDOW.render(records);
+                    TITLEWINDOW.render(identifier, records);
                 }); 
             }
             else {
                 records = TITLEWINDOW.manageQueryResults(records);
-                TITLEWINDOW.render(records);
+                TITLEWINDOW.render(identifier, records);
             }
         });
     }
 
 });
-
-
-
-
-
-
-
-        
-
-

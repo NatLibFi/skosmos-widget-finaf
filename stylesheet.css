@@ -1,6 +1,21 @@
-.paragraph {
-  float: left;
-  width: 50%;
+.versal-bold .versal {
+  color: #000;
+}
+
+#note {
+  line-height: 16px;
+  margin: 15px;
+  color: #000;
+}
+
+#titleWindow {
+  border-top: 2px solid #394554;
+}
+
+#titles {
+  background-color: #fff;
+  margin-top: 3px;
+  border-bottom: 2px solid #d4edeb;
 }
 
 #titles:after {
@@ -9,12 +24,23 @@
   clear: both;
 }
 
-.arrow {
-  border: solid #00748f;
-  border-width: 0 3px 3px 0;
-  display: inline-block;
-  padding: 3px;
-  margin-left: 3px;
+a.toggle-text:hover {
+  color: #000;
+  cursor: pointer;
+  text-decoration: underline !important;
+}
+
+#finna-search {
+  margin: 15px;
+}
+
+.paragraph {
+  float: left;
+  width: 50%;
+}
+
+.note-wrapper {
+  border-bottom: 2px solid #d4edeb;
 }
 
 .up {
@@ -25,6 +51,22 @@
 .down {
   transform: rotate(45deg);
   -webkit-transform: rotate(45deg);
+}
+
+.triangle-up {
+  display: inline-block;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 10px solid black;
+  margin-left: 6px;
+}
+
+.triangle-down {
+  display: inline-block;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 10px solid black;
+  margin-left: 6px;
 }
 
 ul {

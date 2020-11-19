@@ -1,9 +1,11 @@
-<div class="concept-widget panel-group" id="titleWindow" role="tablist" aria-multiselectable="true">   
+<div class="title-widget panel-group" id="titleWindow" role="tablist" aria-multiselectable="true">   
     <div class="panel panel-default">
-        <div class="panel-heading" id="titles">
+        <div class="note-wrapper">
             {{#each notes}}
-                <p>{{ this }}</p>  
+                <p id="note">{{ this }}</p>  
             {{/each}}
         </div>
+        <div class="panel-heading" id="titles"></div>
+        <div id="finna-search"></div>
     </div>
 </div>
