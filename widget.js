@@ -37,7 +37,16 @@ TITLEWINDOW = {
     },
     
     customSortOrder: ['Book', 'Sound', 'MusicalScore', 'Video', 'Journal', 'Image'],
-     
+    
+    glyphicons: {
+        Image: 'picture', 
+        Book: 'book', 
+        Sound: 'cd', 
+        Journal: 'file', 
+        MusicalScore: 'music', 
+        Video: 'film', 
+    },
+
     noteTexts: {
         error: {fi: 'Tekijälle ei löydy julkaisuja.', 
             sv: 'Inga utgåvor hittas för upphovspersonen',
@@ -190,6 +199,14 @@ TITLEWINDOW = {
                 listId += 1;
                 var titleNumber = 0;
                 var $listHeader = $( "<p class='versal-bold'>"+format.toUpperCase()+"</p> ");
+                var originalFormat;
+                $.each (TITLEWINDOW.formatTranslations, function (key, value) {
+                    if (value[TITLEWINDOW.language] == format) {
+                        originalFormat = key;
+                    }
+                });
+                var $image = $( "<span class='glyphicon glyphicon-"+TITLEWINDOW.glyphicons[originalFormat]+"'></span> ");
+                $listHeader.append($image);
                 var $list = $( "<ul class='works-list'></ul> ");
                 $list.attr('id', "list" + listId);
                 $paragraph.append( $listHeader, $list);
@@ -199,6 +216,9 @@ TITLEWINDOW = {
                     if (record.year !== undefined) {
                             year += " (" + record.year + ")";
                         }
+                    if (record.title.length > 90) { 
+                        record.title = record.title.substr(0, 90) + " [...]";
+                    }
                     var $titleText = $ ( "<li style='text-align:left'><a href="
                         +record.url+TITLEWINDOW.languageSuffix[TITLEWINDOW.language]
                         +" target='_blank'>"+record.title+"</a>"+year+"</li>");
@@ -217,14 +237,10 @@ TITLEWINDOW = {
                     $button.click(function(e){
                         $("#" + classId + " .hideable").toggle();
                         if ($("#" + classId + " .hideable").is(':visible')) {
-                            //$button.html("<a class='toggle-text versal'>"+TITLEWINDOW.buttonTexts['less'][TITLEWINDOW.language]
-                            //+"</a><i class='triangle-up'></i>");
                             $button.html(TITLEWINDOW.buttonTexts['less'][TITLEWINDOW.language].toUpperCase()
                             +"<i class='triangle-up'>");                            
                         }
                         else {
-                            //$button.html( "<a class='toggle-text versal'>"+TITLEWINDOW.buttonTexts['more'][TITLEWINDOW.language]
-                            //+"</a><i class='triangle-down'></i>");
                             $button.html(TITLEWINDOW.buttonTexts['more'][TITLEWINDOW.language].toUpperCase()
                             +"<i class='triangle-down'>");
                         }
