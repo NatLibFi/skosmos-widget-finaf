@@ -1,11 +1,6 @@
-.versal-bold .versal {
-  color: #000;
-}
-
 #note {
   line-height: 16px;
   margin: 15px;
-  color: #000;
 }
 
 #titleWindow {
@@ -25,7 +20,7 @@
 }
 
 a.toggle-text:hover {
-  color: #000;
+  color: #333333;
   cursor: pointer;
   text-decoration: underline !important;
 }
@@ -47,21 +42,11 @@ a.toggle-text:hover {
   border-bottom: 2px solid #d4edeb;
 }
 
-.up {
-  transform: rotate(-135deg);
-  -webkit-transform: rotate(-135deg);
-}
-
-.down {
-  transform: rotate(45deg);
-  -webkit-transform: rotate(45deg);
-}
-
 .triangle-up {
   display: inline-block;
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
-  border-bottom: 10px solid black;
+  border-bottom: 10px solid #333333;
   margin-left: 6px;
 }
 
@@ -69,7 +54,7 @@ a.toggle-text:hover {
   display: inline-block;
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
-  border-top: 10px solid black;
+  border-top: 10px solid #333333;
   margin-left: 6px;
 }
 

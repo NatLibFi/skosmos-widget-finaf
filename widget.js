@@ -192,13 +192,13 @@ TITLEWINDOW = {
         var listId = 0;
         $.each( object, function( key, value ) {
             var $paragraph = $( "<div class='paragraph'></div>" );
-            var $header = $( "<div class='versal-bold'><p>"+key.toUpperCase()+"</p></div>");
+            var $header = $( "<div><h3 class='versal-bold'>"+key.toUpperCase()+"</h3></div>");
             $paragraph.appendTo("#titles");
             $paragraph.append( $header);
             $.each ( value, function (format, titleList) {
                 listId += 1;
                 var titleNumber = 0;
-                var $listHeader = $( "<p class='versal-bold'>"+format.toUpperCase()+"</p> ");
+                var $listHeader = $( "<h3 class='versal-bold'>"+format.toUpperCase()+"</h3> ");
                 var originalFormat;
                 $.each (TITLEWINDOW.formatTranslations, function (key, value) {
                     if (value[TITLEWINDOW.language] == format) {
@@ -231,7 +231,7 @@ TITLEWINDOW = {
                     var $button = $ ( "<a class='toggle-text versal'>"
                         +TITLEWINDOW.buttonTexts['more'][TITLEWINDOW.language].toUpperCase()
                         +"<i class='triangle-down'></i></a>");
-                    $button.css({ 'color': 'black'});
+                    $button.css({ 'color': '#333333'});
                     $list.append( $button );
                     var classId = "list" + listId;
                     $button.click(function(e){
