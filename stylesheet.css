@@ -5,12 +5,13 @@
 
 #titleWindow {
   border-top: 2px solid #394554;
+  background-color: #fff;
 }
 
 #titles {
   background-color: #fff;
   margin-top: 3px;
-  border-bottom: 2px solid #d4edeb;
+  margin-left: 15px; /* margin-right: 15px; */ 
 }
 
 #titles:after {
@@ -26,7 +27,8 @@ a.toggle-text:hover {
 }
 
 #finna-search {
-  margin: 15px;
+  padding: 15px;
+  border-top: 2px solid #d4edeb;
 }
 
 .glyphicon {
@@ -36,6 +38,7 @@ a.toggle-text:hover {
 .paragraph {
   float: left;
   width: 50%;
+  padding-right: 8px;
 }
 
 .note-wrapper {
