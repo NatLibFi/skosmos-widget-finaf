@@ -38,11 +38,11 @@ TITLEWINDOW = {
     
     customSortOrder: ['Book', 'Sound', 'MusicalScore', 'Video', 'Journal', 'Image'],
     
-    glyphicons: {
-        Image: 'picture', 
+    fonts: {
+        Image: 'image', 
         Book: 'book', 
-        Sound: 'cd', 
-        Journal: 'file', 
+        Sound: 'record-vinyl', 
+        Journal: 'file-lines', 
         MusicalScore: 'music', 
         Video: 'film', 
     },
@@ -205,7 +205,7 @@ TITLEWINDOW = {
                         originalFormat = key;
                     }
                 });
-                var $image = $( "<span class='glyphicon glyphicon-"+TITLEWINDOW.glyphicons[originalFormat]+"'></span> ");
+                var $image = $( "<span class='fa-solid fa-"+TITLEWINDOW.fonts[originalFormat]+"'></span> ");
                 $listHeader.append($image);
                 var $list = $( "<ul class='works-list'></ul> ");
                 $list.attr('id', "list" + listId);
