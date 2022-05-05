@@ -19,11 +19,15 @@
   display: table;
   clear: both;
 }
-
-a.toggle-text:hover {
+ 
+a.toggle-text {
   color: #333333;
   cursor: pointer;
-  text-decoration: underline !important;
+  text-decoration: none;
+}
+
+a.toggle-text:hover {
+  text-decoration: underline;
 }
 
 #finna-search {
