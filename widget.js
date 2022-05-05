@@ -41,7 +41,7 @@ TITLEWINDOW = {
     fonts: {
         Image: 'image',
         Book: 'book',
-        Sound: 'record-vinyl',
+        Sound: 'compact-disc',
         Journal: 'file-lines',
         MusicalScore: 'music',
         Video: 'film',
@@ -49,16 +49,16 @@ TITLEWINDOW = {
 
     noteTexts: {
         error: {fi: 'Tekijälle ei löydy julkaisuja.',
-            sv: 'Inga utgåvor hittas för upphovspersonen',
+            sv: 'Inga utgåvor hittas för upphovspersonen.',
             en: 'No publications found for the author.'
         },
-        source: {fi: 'Tietoja tekijään liittyvästä aineistosta haettu kansallisbibliografiasta Finnan kautta',
-            sv: 'Information om material som relaterar till upphovspersonen har sökts från nationalbibliografin med Finna',
+        source: {fi: 'Tietoja tekijään liittyvästä aineistosta haettu kansallisbibliografiasta Finnan kautta.',
+            sv: 'Information om material som relaterar till upphovspersonen har sökts från nationalbibliografin med Finna.',
             en: 'Information about authors’ publications is received from national bibliography from Finna.'
         },
-        sorting: {fi: 'Tiedot tekijään liittyvästä aineistosta haettu kansallisbibliografiasta Finnan kautta. Aineisto on järjestetty julkaisuvuoden mukaan.',
-            sv: 'Information om material som relaterar till upphovspersonen har sökts från nationalbibliografin med Finna. Materialet har ordnats enligt utgivningstid',
-            en: 'Information about authors’ publications is received from national bibliography from Finna. Publications are sorted by the publication date.'
+        sorting: {fi: 'Aineisto on järjestetty julkaisuvuoden mukaan.',
+            sv: 'Materialet har ordnats enligt utgivningstid.',
+            en: 'Publications are sorted by the publication date.'
         }
     },
 
@@ -176,6 +176,7 @@ TITLEWINDOW = {
             noteText.push(TITLEWINDOW.noteTexts['source'][TITLEWINDOW.language]);
         }
         else {
+            noteText.push(TITLEWINDOW.noteTexts['source'][TITLEWINDOW.language]);
             noteText.push(TITLEWINDOW.noteTexts['sorting'][TITLEWINDOW.language]);
         }
         var data = {
