@@ -11,6 +11,7 @@ TITLEWINDOW = {
     authorPrefix: "AuthorityRecord/melinda.(FI-ASTERI-N)",
     languageSuffix: {fi:'?lng=fi', sv: '?lng=sv', en: '?lng=en'},
     institution: "building:\"0\/NLF\/\"",
+    filters: ['building:"0/NLF/"', 'finna.deduplication:"0"'],
     fields: ['shortTitle', 'OtherRecordLink', 'formats', 'id', 'year'],
     /*Available values : relevance, id asc, main_date_str desc, main_date_str asc, callnumber,
     author, title, last_indexed desc,id asc, first_indexed desc,id asc
@@ -79,7 +80,7 @@ TITLEWINDOW = {
         var url = TITLEWINDOW.apiUrl + lookfor;
         var parameters = {
             "field": TITLEWINDOW.fields,
-            "filter": TITLEWINDOW.institution,
+            "filter": TITLEWINDOW.filters,
             "limit": TITLEWINDOW.limit,
             "sort": TITLEWINDOW.sortOrder,
             "page": offset
