@@ -188,62 +188,64 @@ TITLEWINDOW = {
         $('#content-bottom').append(template(data));
         var listId = 0;
         $.each( object, function( key, value ) {
-            var $paragraph = $( "<div class='paragraph'></div>" );
-            var $header = $( "<div><h3 class='versal-bold'>"+key.toUpperCase()+"</h3></div>");
-            $paragraph.appendTo("#titles");
-            $paragraph.append( $header);
-            $.each ( value, function (format, titleList) {
-                listId += 1;
-                var titleNumber = 0;
-                var $listHeader = $( "<h3 class='versal-bold'>"+format.toUpperCase()+"</h3> ");
-                var originalFormat;
-                $.each (TITLEWINDOW.formatTranslations, function (key, value) {
-                    if (value[TITLEWINDOW.language] == format) {
-                        originalFormat = key;
-                    }
-                });
-                var $image = $( "<span class='fa-solid fa-"+TITLEWINDOW.fonts[originalFormat]+"'></span> ");
-                $listHeader.append($image);
-                var $list = $( "<ul class='works-list'></ul> ");
-                $list.attr('id', "list" + listId);
-                $paragraph.append( $listHeader, $list);
-                $.each( titleList, function (title, record) {
-                    titleNumber += 1;
-                    var year = "";
-                    if (record.year !== undefined) {
-                            year += " (" + record.year + ")";
-                        }
-                    if (record.title.length > 90) {
-                        record.title = record.title.substr(0, 90) + " [...]";
-                    }
-                    var $titleText = $ ( "<li style='text-align:left'><a href="
-                        +record.url+TITLEWINDOW.languageSuffix[TITLEWINDOW.language]
-                        +" target='_blank'>"+record.title+"</a>"+year+"</li>");
-                    if (titleNumber > 5) {
-                        $titleText.addClass( "hideable" );
-                    }
-                    $list.append( $titleText );
-                });
-                if (titleNumber > 5) {
-                    var $button = $ ( "<a class='toggle-text versal'>"
-                        +TITLEWINDOW.buttonTexts['more'][TITLEWINDOW.language].toUpperCase()
-                        +"<i class='triangle-down'></i></a>");
-                    $button.css({ 'color': '#333333'});
-                    $list.append( $button );
-                    var classId = "list" + listId;
-                    $button.click(function(e){
-                        $("#" + classId + " .hideable").toggle();
-                        if ($("#" + classId + " .hideable").is(':visible')) {
-                            $button.html(TITLEWINDOW.buttonTexts['less'][TITLEWINDOW.language].toUpperCase()
-                            +"<i class='triangle-up'>");
-                        }
-                        else {
-                            $button.html(TITLEWINDOW.buttonTexts['more'][TITLEWINDOW.language].toUpperCase()
-                            +"<i class='triangle-down'>");
+            if (Object.keys(value).length > 0) {
+                var $paragraph = $( "<div class='paragraph'></div>" );
+                var $header = $( "<div><h3 class='versal-bold'>"+key.toUpperCase()+"</h3></div>");
+                $paragraph.appendTo("#titles");
+                $paragraph.append( $header);
+                $.each ( value, function (format, titleList) {
+                    listId += 1;
+                    var titleNumber = 0;
+                    var $listHeader = $( "<h3 class='versal-bold'>"+format.toUpperCase()+"</h3> ");
+                    var originalFormat;
+                    $.each (TITLEWINDOW.formatTranslations, function (key, value) {
+                        if (value[TITLEWINDOW.language] == format) {
+                            originalFormat = key;
                         }
                     });
-                }
-           });
+                    var $image = $( "<span class='fa-solid fa-"+TITLEWINDOW.fonts[originalFormat]+"'></span> ");
+                    $listHeader.append($image);
+                    var $list = $( "<ul class='works-list'></ul> ");
+                    $list.attr('id', "list" + listId);
+                    $paragraph.append( $listHeader, $list);
+                    $.each( titleList, function (title, record) {
+                        titleNumber += 1;
+                        var year = "";
+                        if (record.year !== undefined) {
+                                year += " (" + record.year + ")";
+                            }
+                        if (record.title.length > 90) {
+                            record.title = record.title.substr(0, 90) + " [...]";
+                        }
+                        var $titleText = $ ( "<li style='text-align:left'><a href="
+                            +record.url+TITLEWINDOW.languageSuffix[TITLEWINDOW.language]
+                            +" target='_blank'>"+record.title+"</a>"+year+"</li>");
+                        if (titleNumber > 5) {
+                            $titleText.addClass( "hideable" );
+                        }
+                        $list.append( $titleText );
+                    });
+                    if (titleNumber > 5) {
+                        var $button = $ ( "<a class='toggle-text versal'>"
+                            +TITLEWINDOW.buttonTexts['more'][TITLEWINDOW.language].toUpperCase()
+                            +"<i class='triangle-down'></i></a>");
+                        $button.css({ 'color': '#333333'});
+                        $list.append( $button );
+                        var classId = "list" + listId;
+                        $button.click(function(e){
+                            $("#" + classId + " .hideable").toggle();
+                            if ($("#" + classId + " .hideable").is(':visible')) {
+                                $button.html(TITLEWINDOW.buttonTexts['less'][TITLEWINDOW.language].toUpperCase()
+                                +"<i class='triangle-up'>");
+                            }
+                            else {
+                                $button.html(TITLEWINDOW.buttonTexts['more'][TITLEWINDOW.language].toUpperCase()
+                                +"<i class='triangle-down'>");
+                            }
+                        });
+                    }
+                });
+            }
        });
        $("#finna-search").html("<a class='versal' href="+TITLEWINDOW.finnaURL+TITLEWINDOW.authorPrefix+identifier
        +TITLEWINDOW.languageSuffix[TITLEWINDOW.language]+" target='_blank'>"
