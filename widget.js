@@ -53,13 +53,9 @@ TITLEWINDOW = {
             sv: 'Inga utgåvor hittas för upphovspersonen.',
             en: 'No publications found for the author.'
         },
-        source: {fi: 'Tietoja tekijään liittyvästä aineistosta haettu kansallisbibliografiasta Finnan kautta.',
-            sv: 'Information om material som relaterar till upphovspersonen har sökts från nationalbibliografin med Finna.',
+        source: {fi: 'Tietoja toimijaan liittyvästä aineistosta haettu kansallisbibliografiasta Finnan kautta.',
+            sv: 'Information om material som relaterar till aktören har sökts från nationalbibliografin med Finna.',
             en: 'Information about authors’ publications is received from national bibliography from Finna.'
-        },
-        sorting: {fi: 'Aineisto on järjestetty julkaisuvuoden mukaan.',
-            sv: 'Materialet har ordnats enligt utgivningstid.',
-            en: 'Publications are sorted by the publication date.'
         }
     },
 
@@ -172,14 +168,8 @@ TITLEWINDOW = {
 
     render: function(identifier, object) {
         var noteText = [];
-        if (jQuery.isEmptyObject(object)) {
-            noteText.push(TITLEWINDOW.noteTexts['error'][TITLEWINDOW.language]);
-            noteText.push(TITLEWINDOW.noteTexts['source'][TITLEWINDOW.language]);
-        }
-        else {
-            noteText.push(TITLEWINDOW.noteTexts['source'][TITLEWINDOW.language]);
-            noteText.push(TITLEWINDOW.noteTexts['sorting'][TITLEWINDOW.language]);
-        }
+        if (jQuery.isEmptyObject(object)) noteText.push(TITLEWINDOW.noteTexts['error'][TITLEWINDOW.language]);
+        noteText.push(TITLEWINDOW.noteTexts['source'][TITLEWINDOW.language]);
         var data = {
                 notes: noteText
             };
