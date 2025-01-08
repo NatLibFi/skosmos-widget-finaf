@@ -167,11 +167,11 @@ TITLEWINDOW = {
     },
 
     render: function(identifier, object) {
-        var noteText = [];
-        if (jQuery.isEmptyObject(object)) noteText.push(TITLEWINDOW.noteTexts['error'][TITLEWINDOW.language]);
-        noteText.push(TITLEWINDOW.noteTexts['source'][TITLEWINDOW.language]);
+        var noteText = "";
+        if (jQuery.isEmptyObject(object)) noteText += TITLEWINDOW.noteTexts['error'][TITLEWINDOW.language] + " ";
+        noteText += TITLEWINDOW.noteTexts['source'][TITLEWINDOW.language];
         var data = {
-                notes: noteText
+                note: noteText
             };
         var source = $("#finaf-template").html();
 		var template = Handlebars.compile(source);

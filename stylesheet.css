@@ -31,7 +31,10 @@ a.toggle-text:hover {
 }
 
 #finna-search {
-  padding: 15px;
+  padding-top: 0.5rem;
+  padding-right: 1rem;
+  padding-bottom: 0.5rem;
+  padding-left: 1rem;
   border-top: 2px solid #d4edeb;
 }
 
@@ -52,14 +55,14 @@ a.toggle-text:hover {
   padding-bottom: 0.5rem;
   padding-left: 1rem;
   border-bottom: 2px solid #d4edeb;
-  font-size: var(--font-size);
+  font-size: 16px;
   color: var(--gray-900);
   --font-family: 'Fira Sans', sans-serif;
   background-image: url("../../resource/finto-pics/about.png");
   background-repeat: no-repeat;
   background-size: 16px 16px;
-  background-position-x: 20px;
-  background-position-y: 22px;
+  background-position-x: 1em;
+  background-position-y: 12px;
   padding-left: 33px;
 }
 
