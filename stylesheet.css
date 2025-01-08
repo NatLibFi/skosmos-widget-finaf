@@ -55,14 +55,14 @@ a.toggle-text:hover {
   padding-bottom: 0.5rem;
   padding-left: 1rem;
   border-bottom: 2px solid #d4edeb;
-  font-size: 16px;
+  font-size: 14px;
   color: var(--gray-900);
   --font-family: 'Fira Sans', sans-serif;
   background-image: url("../../resource/finto-pics/about.png");
   background-repeat: no-repeat;
   background-size: 16px 16px;
   background-position-x: 1em;
-  background-position-y: 12px;
+  background-position-y: 10px;
   padding-left: 33px;
 }
 

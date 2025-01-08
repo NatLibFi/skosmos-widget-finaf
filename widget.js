@@ -237,6 +237,9 @@ TITLEWINDOW = {
                 });
             }
        });
+       if (jQuery.isEmptyObject(object)) {
+            $("#titles").hide();
+        }
        $("#finna-search").html("<a class='versal' href="+TITLEWINDOW.finnaURL+TITLEWINDOW.authorPrefix+identifier
        +TITLEWINDOW.languageSuffix[TITLEWINDOW.language]+" target='_blank'>"
        +TITLEWINDOW.finnaSearchTexts[TITLEWINDOW.language]+"</a>");
