@@ -9,7 +9,7 @@ TITLEWINDOW = {
     finnaURL: "https://kansalliskirjasto.finna.fi/",
     recordPrefix: "Record/",
     authorPrefix: "AuthorityRecord/melinda.(FI-ASTERI-N)",
-    languageSuffix: {fi:'?lng=fi', sv: '?lng=sv', en: '?lng=en'},
+    languageSuffix: {fi:'?lng=fi', sv: '?lng=sv', en: '?lng=en', se: '?lng=se'},
     institution: "building:\"0\/NLF\/\"",
     filters: ['building:"0/NLF/"', 'finna.deduplication:"0"'],
     fields: ['shortTitle', 'OtherRecordLink', 'formats', 'id', 'year'],
@@ -23,18 +23,18 @@ TITLEWINDOW = {
     language: "fi",
 
     translatedLookforFields: {
-        author2_id_str_mv: {fi: 'Tekijänä teoksissa', sv: 'upphov för verken', en: 'as author'},
-        topic_id_str_mv: {fi: 'Aiheena teoksissa', sv: 'ämne i verken', en: 'as topic'}
+        author2_id_str_mv: {fi: 'Tekijänä teoksissa', sv: 'upphov för verken', en: 'as author', se: 'Dahkkin dujiin'},
+        topic_id_str_mv: {fi: 'Aiheena teoksissa', sv: 'ämne i verken', en: 'as topic', se: 'Fáddán dujiin'}
     },
 
     formatTranslations: {
-        Image: {fi: 'kuvia', sv: 'bilder', en: 'images'},
-        Book: {fi: 'kirjoja', sv: 'böcker', en: 'books'},
-        Sound: {fi: 'äänitteitä', sv: 'ljudspelningar', en: 'sound recordings'},
-        Journal: {fi: 'lehtiä ja artikkeleita', sv: 'tidskriftar och artiklar', en: 'journals and articles'},
-        MusicalScore: {fi: 'nuotteja', sv: 'noter', en: 'musical scores'},
-        Video: {fi: 'videoita', sv: 'video', en: 'videos'},
-        Thesis: {fi: 'opinnäytteitä', sv: 'examensarbeten', en: 'theses'}
+        Image: {fi: 'kuvia', sv: 'bilder', en: 'images', se: 'govat'},
+        Book: {fi: 'kirjoja', sv: 'böcker', en: 'books', se: 'girjjit'},
+        Sound: {fi: 'äänitteitä', sv: 'ljudspelningar', en: 'sound recordings', se: 'jietnabáttit'},
+        Journal: {fi: 'lehtiä ja artikkeleita', sv: 'tidskriftar och artiklar', en: 'journals and articles', se: 'aviissat ja artihkkalat'},
+        MusicalScore: {fi: 'nuotteja', sv: 'noter', en: 'musical scores', se: 'nuohtat'},
+        Video: {fi: 'videoita', sv: 'video', en: 'videos', se: 'videot'},
+        Thesis: {fi: 'opinnäytteitä', sv: 'examensarbeten', en: 'theses', se: 'oahppočájánasat'}
     },
 
     customSortOrder: ['Book', 'Sound', 'MusicalScore', 'Video', 'Journal', 'Image'],
@@ -51,23 +51,26 @@ TITLEWINDOW = {
     noteTexts: {
         error: {fi: 'Tekijälle ei löydy julkaisuja.',
             sv: 'Inga utgåvor hittas för upphovspersonen.',
-            en: 'No publications found for the author.'
+            en: 'No publications found for the author.',
+            se: 'Dahkkái eai gávdno publikašuvnnat.'
         },
         source: {fi: 'Tietoja toimijaan liittyvästä aineistosta haettu kansallisbibliografiasta Finnan kautta.',
             sv: 'Information om material som relaterar till aktören har sökts från nationalbibliografin med Finna.',
-            en: 'Information about authors’ publications is received from national bibliography from Finna.'
+            en: 'Information about authors’ publications is received from national bibliography from Finna.',
+            se: 'Dieđut doibmii laktáseaddji materiálain leat vižžon álbmotbibliografiijas Finna bokte.'
         }
     },
 
     buttonTexts: {
-        more: {fi: 'Näytä kaikki', sv: 'Visa allt', en: 'Show all'},
-        less: {fi: 'Näytä vähemmän', sv: 'Visa mindre', en: 'Show less'}
+        more: {fi: 'Näytä kaikki', sv: 'Visa allt', en: 'Show all', se: 'Čájet visot'},
+        less: {fi: 'Näytä vähemmän', sv: 'Visa mindre', en: 'Show less', se: 'Čájet uhcit'}
     },
 
     finnaSearchTexts: {
         fi: 'Katso hakutulokset Kansalliskirjaston hakupalvelusta',
         sv: 'Se alla sökresultat från söktjänst för Nationalbiblioteket',
-        en: 'See all the results from the National Library Search'
+        en: 'See all the results from the National Library Search',
+        se: 'Geahča ohcanbohtosiid Álbmotgirjeráju ohcanbálvalusas '
     },
 
     generateQueryString: function(identifier, lookforField, offset) {
